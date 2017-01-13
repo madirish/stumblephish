@@ -24,8 +24,35 @@ CREATE USER 'sp_mailer'@'localhost' IDENTIFIED BY 'change_stumblephish_password'
 CREATE USER 'sp_website'@'localhost' IDENTIFIED BY 'change_stumblephish_password';
 CREATE USER 'sp_reportadmin'@'localhost' IDENTIFIED BY 'change_stumblephish_password';
 
+-- Superadmin/developer account
 GRANT ALL ON stumblephish.* TO 'sp_admin'@'localhost';
+-- Mailer account
 GRANT SELECT ON stumblephish.campaign TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.campaign_x_group TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.group TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.target_x_group TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.target TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.email_template TO 'sp_mailer'@'localhost';
+GRANT SELECT,INSERT ON stumblephish.target TO 'sp_mailer'@'localhost';
+GRANT INSERT ON stumblephish.logs TO 'sp_mailer'@'localhost';
+GRANT INSERT ON stumblephish.mailer TO 'sp_mailer'@'localhost';
+-- Website front end account
+GRANT SELECT ON stumblephish.web_template TO 'sp_website'@'localhost';
+GRANT INSERT ON stumblephish.logs TO 'sp_website'@'localhost';
+GRANT INSERT ON stumblephish.bite TO 'sp_website'@'localhost';
+-- Administrative interface account
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.campaign TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.campaign_x_group TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.group TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.target_x_group TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.target TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.email_template TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.web_template TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.target TO 'sp_reportadmin'@'localhost';
+GRANT SELECT ON stumblephish.token TO 'sp_reportadmin'@'localhost';
+GRANT SELECT ON stumblephish.bite TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT ON stumblephish.logs TO 'sp_reportadmin'@'localhost';
+GRANT SELECT ON stumblephish.mailer TO 'sp_reportadmin'@'localhost';
 
 -- -----------------------------------------------------
 -- Table `stumblephish`.`target`
@@ -86,17 +113,17 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign` (
   CONSTRAINT `fk_campaign_1`
     FOREIGN KEY (`email_template_id`)
     REFERENCES `stumblephish`.`email_template` (`email_template_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_campaign_2`
     FOREIGN KEY (`landing_template_id`)
     REFERENCES `stumblephish`.`web_template` (`web_template_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_campaign_3`
     FOREIGN KEY (`education_template_id`)
     REFERENCES `stumblephish`.`web_template` (`web_template_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Phishing campaigns tracked by the Stumblephish system.';
@@ -116,12 +143,12 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`token` (
   CONSTRAINT `fk_token_1`
     FOREIGN KEY (`campaign_id`)
     REFERENCES `stumblephish`.`campaign` (`campaign_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_token_2`
     FOREIGN KEY (`target_id`)
     REFERENCES `stumblephish`.`target` (`target_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Unique tokens are generated on a per-campaign and per-recipient basis in order to disguise this information in transit and to the end user.';
@@ -142,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`bite` (
   CONSTRAINT `fk_bite_1`
     FOREIGN KEY (`token_id`)
     REFERENCES `stumblephish`.`token` (`token_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Tracking hits by phishing targets when they land on specific template pages with tokens.';
@@ -170,12 +197,12 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`target_x_group` (
   CONSTRAINT `fk_target_x_group_1`
     FOREIGN KEY (`target_id`)
     REFERENCES `stumblephish`.`target` (`target_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_target_x_group_2`
     FOREIGN KEY (`group_id`)
     REFERENCES `stumblephish`.`group` (`group_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Targets can be in multiple groups.';
@@ -192,12 +219,12 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign_x_group` (
   CONSTRAINT `fk_campaign_x_group_1`
     FOREIGN KEY (`campaign_id`)
     REFERENCES `stumblephish`.`campaign` (`campaign_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_campaign_x_group_2`
     FOREIGN KEY (`group_id`)
     REFERENCES `stumblephish`.`group` (`group_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Campaigns can target multiple groups and groups can be used in multiple campaigns.';
@@ -227,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`mailer` (
   CONSTRAINT `fk_mailer_1`
     FOREIGN KEY (`token_id`)
     REFERENCES `stumblephish`.`token` (`token_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Logs from the mailer application about when mails were sent, whether they were successful and any SMTP feedback.';
