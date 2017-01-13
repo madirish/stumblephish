@@ -8,19 +8,29 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema stumblephish
+--
+-- Stumblephish customizable phishing campaign application
 -- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `stumblephish` DEFAULT CHARACTER SET utf8 ;
+USE `stumblephish` ;
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Create user accounts
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+
+CREATE USER 'sp_admin'@'localhost' IDENTIFIED BY 'change_stumblephish_password';
+CREATE USER 'sp_mailer'@'localhost' IDENTIFIED BY 'change_stumblephish_password';
+CREATE USER 'sp_website'@'localhost' IDENTIFIED BY 'change_stumblephish_password';
+CREATE USER 'sp_reportadmin'@'localhost' IDENTIFIED BY 'change_stumblephish_password';
+
+GRANT ALL ON stumblephish.* TO 'sp_admin'@'localhost';
+GRANT SELECT ON stumblephish.campaign TO 'sp_mailer'@'localhost';
 
 -- -----------------------------------------------------
--- Table `mydb`.`target`
+-- Table `stumblephish`.`target`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`target` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`target` (
   `target_id` INT NOT NULL,
   `target_fname` VARCHAR(255) NULL,
   `target_lname` VARCHAR(255) NULL,
@@ -34,9 +44,9 @@ COMMENT = 'The people who can be targeted in a campaign.';
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`email_template`
+-- Table `stumblephish`.`email_template`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`email_template` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`email_template` (
   `email_template_id` INT NOT NULL,
   `email_template_name` VARCHAR(255) NOT NULL,
   `email_template_text` TEXT NOT NULL,
@@ -46,9 +56,9 @@ COMMENT = 'Templates for phishing emails.';
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`web_template`
+-- Table `stumblephish`.`web_template`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`web_template` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`web_template` (
   `web_template_id` INT NOT NULL,
   `web_template_name` VARCHAR(255) NULL,
   `web_template_text` TEXT NULL,
@@ -58,9 +68,9 @@ COMMENT = 'Web templates for landing and education pages.';
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`campaign`
+-- Table `stumblephish`.`campaign`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`campaign` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign` (
   `campaign_id` INT NOT NULL,
   `campaign_name` VARCHAR(255) NOT NULL,
   `campaign_start` DATETIME NOT NULL,
@@ -75,17 +85,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`campaign` (
   INDEX `fk_campaign_3_idx` (`education_template_id` ASC),
   CONSTRAINT `fk_campaign_1`
     FOREIGN KEY (`email_template_id`)
-    REFERENCES `mydb`.`email_template` (`email_template_id`)
+    REFERENCES `stumblephish`.`email_template` (`email_template_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_campaign_2`
     FOREIGN KEY (`landing_template_id`)
-    REFERENCES `mydb`.`web_template` (`web_template_id`)
+    REFERENCES `stumblephish`.`web_template` (`web_template_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_campaign_3`
     FOREIGN KEY (`education_template_id`)
-    REFERENCES `mydb`.`web_template` (`web_template_id`)
+    REFERENCES `stumblephish`.`web_template` (`web_template_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -93,9 +103,9 @@ COMMENT = 'Phishing campaigns tracked by the Stumblephish system.';
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`token`
+-- Table `stumblephish`.`token`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`token` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`token` (
   `token_id` INT NOT NULL,
   `campaign_id` INT NOT NULL,
   `target_id` INT NOT NULL,
@@ -105,12 +115,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`token` (
   INDEX `fk_token_2_idx` (`target_id` ASC),
   CONSTRAINT `fk_token_1`
     FOREIGN KEY (`campaign_id`)
-    REFERENCES `mydb`.`campaign` (`campaign_id`)
+    REFERENCES `stumblephish`.`campaign` (`campaign_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_token_2`
     FOREIGN KEY (`target_id`)
-    REFERENCES `mydb`.`target` (`target_id`)
+    REFERENCES `stumblephish`.`target` (`target_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -118,9 +128,9 @@ COMMENT = 'Unique tokens are generated on a per-campaign and per-recipient basis
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`bite`
+-- Table `stumblephish`.`bite`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`bite` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`bite` (
   `bite_id` INT NOT NULL,
   `token_id` INT NOT NULL,
   `bite_when` DATETIME NOT NULL,
@@ -131,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`bite` (
   INDEX `fk_bite_1_idx` (`token_id` ASC),
   CONSTRAINT `fk_bite_1`
     FOREIGN KEY (`token_id`)
-    REFERENCES `mydb`.`token` (`token_id`)
+    REFERENCES `stumblephish`.`token` (`token_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -139,9 +149,9 @@ COMMENT = 'Tracking hits by phishing targets when they land on specific template
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`group`
+-- Table `stumblephish`.`group`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`group` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`group` (
   `group_id` INT NOT NULL,
   `group_name` VARCHAR(255) NULL,
   PRIMARY KEY (`group_id`))
@@ -150,21 +160,21 @@ COMMENT = 'Campaigns target specific groups rather than individual users.  This 
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`target_x_group`
+-- Table `stumblephish`.`target_x_group`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`target_x_group` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`target_x_group` (
   `target_id` INT NOT NULL,
   `group_id` INT NOT NULL,
   INDEX `fk_target_x_group_1_idx` (`target_id` ASC),
   INDEX `fk_target_x_group_2_idx` (`group_id` ASC),
   CONSTRAINT `fk_target_x_group_1`
     FOREIGN KEY (`target_id`)
-    REFERENCES `mydb`.`target` (`target_id`)
+    REFERENCES `stumblephish`.`target` (`target_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_target_x_group_2`
     FOREIGN KEY (`group_id`)
-    REFERENCES `mydb`.`group` (`group_id`)
+    REFERENCES `stumblephish`.`group` (`group_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -172,25 +182,55 @@ COMMENT = 'Targets can be in multiple groups.';
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`campaign_x_group`
+-- Table `stumblephish`.`campaign_x_group`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`campaign_x_group` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign_x_group` (
   `campaign_id` INT NOT NULL,
   `group_id` INT NOT NULL,
   INDEX `fk_campaign_x_group_1_idx` (`campaign_id` ASC),
   INDEX `fk_campaign_x_group_2_idx` (`group_id` ASC),
   CONSTRAINT `fk_campaign_x_group_1`
     FOREIGN KEY (`campaign_id`)
-    REFERENCES `mydb`.`campaign` (`campaign_id`)
+    REFERENCES `stumblephish`.`campaign` (`campaign_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_campaign_x_group_2`
     FOREIGN KEY (`group_id`)
-    REFERENCES `mydb`.`group` (`group_id`)
+    REFERENCES `stumblephish`.`group` (`group_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Campaigns can target multiple groups and groups can be used in multiple campaigns.';
+
+-- -----------------------------------------------------
+-- Table `stumblephish`.`logs`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `stumblephish`.`logs` (
+  `log_message` TEXT NOT NULL,
+  `log_datetime` DATETIME NOT NULL DEFAULT NOW(),
+  `log_type` ENUM('INFO', 'WARN', 'ERROR') NOT NULL DEFAULT 'INFO')
+ENGINE = InnoDB
+COMMENT = 'Used for internal application logs.';
+
+
+-- -----------------------------------------------------
+-- Table `stumblephish`.`mailer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `stumblephish`.`mailer` (
+  `mailer_id` INT NOT NULL,
+  `token_id` INT NOT NULL,
+  `mailer_sendtime` DATETIME NOT NULL DEFAULT NOW(),
+  `mailer_successful` TINYINT(1) NOT NULL DEFAULT 1,
+  `mailer_message` TEXT NULL,
+  PRIMARY KEY (`mailer_id`),
+  INDEX `fk_mailer_1_idx` (`token_id` ASC),
+  CONSTRAINT `fk_mailer_1`
+    FOREIGN KEY (`token_id`)
+    REFERENCES `stumblephish`.`token` (`token_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = 'Logs from the mailer application about when mails were sent, whether they were successful and any SMTP feedback.';
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
