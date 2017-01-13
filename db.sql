@@ -164,6 +164,7 @@ CREATE TABLE IF NOT EXISTS `stumblephish`.`bite` (
   `bite_browser_ua` VARCHAR(255) NULL,
   `bite_remote_addr` VARCHAR(15) NOT NULL,
   `bite_remote_addr_num` INT NOT NULL,
+  `bite_post_vars` TEXT,
   PRIMARY KEY (`bite_id`),
   INDEX `fk_bite_1_idx` (`token_id` ASC),
   CONSTRAINT `fk_bite_1`
