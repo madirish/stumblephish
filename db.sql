@@ -203,7 +203,7 @@ COMMENT = 'Campaigns can target multiple groups.';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`logs` (
   `log_message` TEXT NOT NULL,
-  `log_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `log_datetime` DATETIME NOT NULL,
   `log_type` ENUM('INFO', 'WARN', 'ERROR') NOT NULL DEFAULT 'INFO')
 ENGINE = InnoDB
 COMMENT = 'Used for internal application logs.';
@@ -215,7 +215,7 @@ COMMENT = 'Used for internal application logs.';
 CREATE TABLE IF NOT EXISTS `stumblephish`.`mailer` (
   `mailer_id` INT NOT NULL,
   `token_id` INT NOT NULL,
-  `mailer_sendtime` DATETIME NOT NULL DEFAULT NOW(),
+  `mailer_sendtime` DATETIME NOT NULL,
   `mailer_successful` TINYINT(1) NOT NULL DEFAULT 1,
   `mailer_message` TEXT NULL,
   PRIMARY KEY (`mailer_id`),
