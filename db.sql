@@ -203,7 +203,7 @@ COMMENT = 'Campaigns can target multiple groups.';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`logs` (
   `log_message` TEXT NOT NULL,
-  `log_datetime` DATETIME NOT NULL DEFAULT NOW(),
+  `log_datetime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `log_type` ENUM('INFO', 'WARN', 'ERROR') NOT NULL DEFAULT 'INFO')
 ENGINE = InnoDB
 COMMENT = 'Used for internal application logs.';
