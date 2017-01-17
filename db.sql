@@ -76,7 +76,12 @@ COMMENT = 'The people who can be targeted in a campaign.';
 CREATE TABLE IF NOT EXISTS `stumblephish`.`email_template` (
   `email_template_id` INT NOT NULL,
   `email_template_name` VARCHAR(255) NOT NULL,
-  `email_template_text` TEXT NOT NULL,
+  `email_template_html_text` TEXT NULL,
+  `email_template_plain_text` TEXT NOT NULL,
+  `email_template_subject` VARCHAR(255) NOT NULL,
+  `email_template_sender_name` VARCHAR(255) NOT NULL,
+  `email_template_sender_email` VARCHAR(255) NOT NULL,
+  `email_template_replyto` VARCHAR(255) NULL,
   PRIMARY KEY (`email_template_id`))
 ENGINE = InnoDB
 COMMENT = 'Templates for phishing emails.';
