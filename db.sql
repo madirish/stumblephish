@@ -21,7 +21,7 @@ USE `stumblephish` ;
 -- Table `stumblephish`.`target`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`target` (
-  `target_id` INT NOT NULL,
+  `target_id` INT NOT NULL AUTO_INCREMENT,
   `target_fname` VARCHAR(255) NULL,
   `target_lname` VARCHAR(255) NULL,
   `target_email` VARCHAR(255) NOT NULL,
@@ -37,7 +37,7 @@ COMMENT = 'The people who can be targeted in a campaign.';
 -- Table `stumblephish`.`email_template`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`email_template` (
-  `email_template_id` INT NOT NULL,
+  `email_template_id` INT NOT NULL AUTO_INCREMENT,
   `email_template_name` VARCHAR(255) NOT NULL,
   `email_template_html_text` TEXT NULL,
   `email_template_plain_text` TEXT NOT NULL,
@@ -54,7 +54,7 @@ COMMENT = 'Templates for phishing emails.';
 -- Table `stumblephish`.`web_template`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`web_template` (
-  `web_template_id` INT NOT NULL,
+  `web_template_id` INT NOT NULL AUTO_INCREMENT,
   `web_template_name` VARCHAR(255) NULL,
   `web_template_text` TEXT NULL,
   PRIMARY KEY (`web_template_id`))
@@ -66,7 +66,7 @@ COMMENT = 'Templates for web pages.';
 -- Table `stumblephish`.`campaign`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign` (
-  `campaign_id` INT NOT NULL,
+  `campaign_id` INT NOT NULL AUTO_INCREMENT,
   `campaign_name` VARCHAR(255) NOT NULL,
   `campaign_start` DATETIME NOT NULL,
   `campaign_end` DATETIME NOT NULL,
@@ -101,7 +101,7 @@ COMMENT = 'Phishing campaigns tracked by the Stumblephish system.';
 -- Table `stumblephish`.`token`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`token` (
-  `token_id` INT NOT NULL,
+  `token_id` INT NOT NULL AUTO_INCREMENT,
   `campaign_id` INT NOT NULL,
   `target_id` INT NOT NULL,
   `token_token` VARCHAR(255) NOT NULL,
@@ -126,7 +126,7 @@ COMMENT = 'Unique tokens to disguise info.';
 -- Table `stumblephish`.`bite`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`bite` (
-  `bite_id` INT NOT NULL,
+  `bite_id` INT NOT NULL AUTO_INCREMENT,
   `token_id` INT NOT NULL,
   `bite_when` DATETIME NOT NULL,
   `bite_browser_ua` VARCHAR(255) NULL,
@@ -148,7 +148,7 @@ COMMENT = 'Tracking hits by phishing targets when they land.';
 -- Table `stumblephish`.`group`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`group` (
-  `group_id` INT NOT NULL,
+  `group_id` INT NOT NULL AUTO_INCREMENT,
   `group_name` VARCHAR(255) NULL,
   PRIMARY KEY (`group_id`))
 ENGINE = InnoDB
@@ -213,7 +213,7 @@ COMMENT = 'Used for internal application logs.';
 -- Table `stumblephish`.`mailer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`mailer` (
-  `mailer_id` INT NOT NULL,
+  `mailer_id` INT NOT NULL AUTO_INCREMENT,
   `token_id` INT NOT NULL,
   `mailer_sendtime` DATETIME NOT NULL,
   `mailer_successful` TINYINT(1) NOT NULL DEFAULT 1,
