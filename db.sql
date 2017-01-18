@@ -66,8 +66,8 @@ COMMENT = 'Templates for web pages.';
 CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign` (
   `campaign_id` INT NOT NULL AUTO_INCREMENT,
   `campaign_name` VARCHAR(255) NOT NULL,
-  `campaign_start` DATETIME NOT NULL,
-  `campaign_end` DATETIME NOT NULL,
+  `campaign_startz` DATETIME NOT NULL, -- UTC (Zulu) time
+  `campaign_endz` DATETIME NOT NULL, -- UTC (Zulu) time
   `email_template_id` INT NOT NULL,
   `landing_template_id` INT NOT NULL,
   `education_template_id` INT NOT NULL,
@@ -126,7 +126,7 @@ COMMENT = 'Unique tokens to disguise info.';
 CREATE TABLE IF NOT EXISTS `stumblephish`.`bite` (
   `bite_id` INT NOT NULL AUTO_INCREMENT,
   `token_id` INT NOT NULL,
-  `bite_when` DATETIME NOT NULL,
+  `bite_whenz` DATETIME NOT NULL, -- UTC (Zulu) time
   `bite_browser_ua` VARCHAR(255) NULL,
   `bite_remote_addr` VARCHAR(15) NOT NULL,
   `bite_remote_addr_num` INT NOT NULL,
@@ -201,7 +201,7 @@ COMMENT = 'Campaigns can target multiple groups.';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`logs` (
   `log_message` TEXT NOT NULL,
-  `log_datetime` DATETIME NOT NULL,
+  `log_datetimez` DATETIME NOT NULL, -- UTC (Zulu) time
   `log_type` ENUM('INFO', 'WARN', 'ERROR') NOT NULL DEFAULT 'INFO')
 ENGINE = InnoDB
 COMMENT = 'Used for internal application logs.';
@@ -213,9 +213,9 @@ COMMENT = 'Used for internal application logs.';
 CREATE TABLE IF NOT EXISTS `stumblephish`.`mailer` (
   `mailer_id` INT NOT NULL AUTO_INCREMENT,
   `token_id` INT NOT NULL,
-  `mailer_sendtime` DATETIME NOT NULL,
+  `mailer_sendtimez` DATETIME NOT NULL, -- UTC (Zulu) time
   `mailer_successful` TINYINT(1) NOT NULL DEFAULT 1,
-  `mailer_message` TEXT NULL,
+  `mailer_message` TEXT NULL,  -- Feedback or other notices from mailing
   PRIMARY KEY (`mailer_id`),
   INDEX `fk_mailer_1_idx` (`token_id` ASC),
   CONSTRAINT `fk_mailer_1`
