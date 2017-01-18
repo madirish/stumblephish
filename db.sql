@@ -146,7 +146,7 @@ COMMENT = 'Tracking hits by phishing targets when they land.';
 -- Table `stumblephish`.`groups`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stumblephish`.`groups` (
-  `sp_groups_id` INT NOT NULL AUTO_INCREMENT,
+  `groups_id` INT NOT NULL AUTO_INCREMENT,
   `groups_name` VARCHAR(255) NULL,
   PRIMARY KEY (`groups_id`))
 ENGINE = InnoDB
