@@ -143,32 +143,32 @@ COMMENT = 'Tracking hits by phishing targets when they land.';
 
 
 -- -----------------------------------------------------
--- Table `stumblephish`.`group`
+-- Table `stumblephish`.`groups`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `stumblephish`.`group` (
-  `group_id` INT NOT NULL AUTO_INCREMENT,
-  `group_name` VARCHAR(255) NULL,
-  PRIMARY KEY (`group_id`))
+CREATE TABLE IF NOT EXISTS `stumblephish`.`groups` (
+  `sp_groups_id` INT NOT NULL AUTO_INCREMENT,
+  `groups_name` VARCHAR(255) NULL,
+  PRIMARY KEY (`groups_id`))
 ENGINE = InnoDB
 COMMENT = 'Campaigns target specific groups rather .';
 
 
 -- -----------------------------------------------------
--- Table `stumblephish`.`target_x_group`
+-- Table `stumblephish`.`target_x_groups`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `stumblephish`.`target_x_group` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`target_x_groups` (
   `target_id` INT NOT NULL,
-  `group_id` INT NOT NULL,
-  INDEX `fk_target_x_group_1_idx` (`target_id` ASC),
-  INDEX `fk_target_x_group_2_idx` (`group_id` ASC),
-  CONSTRAINT `fk_target_x_group_1`
+  `groups_id` INT NOT NULL,
+  INDEX `fk_target_x_groups_1_idx` (`target_id` ASC),
+  INDEX `fk_target_x_groups_2_idx` (`groups_id` ASC),
+  CONSTRAINT `fk_target_x_groups_1`
     FOREIGN KEY (`target_id`)
     REFERENCES `stumblephish`.`target` (`target_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_target_x_group_2`
-    FOREIGN KEY (`group_id`)
-    REFERENCES `stumblephish`.`group` (`group_id`)
+  CONSTRAINT `fk_target_x_groups_2`
+    FOREIGN KEY (`groups_id`)
+    REFERENCES `stumblephish`.`groups` (`groups_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -176,21 +176,21 @@ COMMENT = 'Targets can be in multiple groups.';
 
 
 -- -----------------------------------------------------
--- Table `stumblephish`.`campaign_x_group`
+-- Table `stumblephish`.`campaign_x_groups`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign_x_group` (
+CREATE TABLE IF NOT EXISTS `stumblephish`.`campaign_x_groups` (
   `campaign_id` INT NOT NULL,
-  `group_id` INT NOT NULL,
-  INDEX `fk_campaign_x_group_1_idx` (`campaign_id` ASC),
-  INDEX `fk_campaign_x_group_2_idx` (`group_id` ASC),
-  CONSTRAINT `fk_campaign_x_group_1`
+  `groups_id` INT NOT NULL,
+  INDEX `fk_campaign_x_groups_1_idx` (`campaign_id` ASC),
+  INDEX `fk_campaign_x_groups_2_idx` (`groups_id` ASC),
+  CONSTRAINT `fk_campaign_x_groups_1`
     FOREIGN KEY (`campaign_id`)
     REFERENCES `stumblephish`.`campaign` (`campaign_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_campaign_x_group_2`
-    FOREIGN KEY (`group_id`)
-    REFERENCES `stumblephish`.`group` (`group_id`)
+  CONSTRAINT `fk_campaign_x_groups_2`
+    FOREIGN KEY (`groups_id`)
+    REFERENCES `stumblephish`.`groups` (`groups_id`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
