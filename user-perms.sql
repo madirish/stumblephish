@@ -11,9 +11,9 @@ CREATE USER 'sp_reportadmin'@'localhost' IDENTIFIED BY 'change_stumblephish_pass
 GRANT ALL ON stumblephish.* TO 'sp_admin'@'localhost';
 -- Mailer account
 GRANT SELECT ON stumblephish.campaign TO 'sp_mailer'@'localhost';
-GRANT SELECT ON stumblephish.campaign_x_group TO 'sp_mailer'@'localhost';
-GRANT SELECT ON stumblephish.group TO 'sp_mailer'@'localhost';
-GRANT SELECT ON stumblephish.target_x_group TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.campaign_x_groups TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.groups TO 'sp_mailer'@'localhost';
+GRANT SELECT ON stumblephish.target_x_groups TO 'sp_mailer'@'localhost';
 GRANT SELECT ON stumblephish.target TO 'sp_mailer'@'localhost';
 GRANT SELECT ON stumblephish.email_template TO 'sp_mailer'@'localhost';
 GRANT SELECT ON stumblephish.target TO 'sp_mailer'@'localhost';
@@ -27,9 +27,9 @@ GRANT INSERT ON stumblephish.bite TO 'sp_website'@'localhost';
 GRANT SELECT ON stumblephish.token TO 'sp_website'@'localhost';
 -- Administrative interface account
 GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.campaign TO 'sp_reportadmin'@'localhost';
-GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.campaign_x_group TO 'sp_reportadmin'@'localhost';
-GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.group TO 'sp_reportadmin'@'localhost';
-GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.target_x_group TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.campaign_x_groups TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.groups TO 'sp_reportadmin'@'localhost';
+GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.target_x_groups TO 'sp_reportadmin'@'localhost';
 GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.target TO 'sp_reportadmin'@'localhost';
 GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.email_template TO 'sp_reportadmin'@'localhost';
 GRANT SELECT,INSERT,UPDATE,DELETE ON stumblephish.web_template TO 'sp_reportadmin'@'localhost';
