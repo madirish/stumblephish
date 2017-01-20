@@ -2,14 +2,14 @@
 // src/Target.php
 
 /**
- * @Entity @Table(name="groups")
+ * @Entity @Table(name="target")
 **/
 class Target
 {
 	/**
 	 * Many targets have many Groups.
-	 * @ManyToMany(targetEntity="Groups", inverseBy="target")
-	 * @JoinTable(name="target_x_groups")
+	 * @ManyToMany(targetEntity="Groups")
+	 * 
 	 */
 	private $groups = null;
 	/**
@@ -19,7 +19,7 @@ class Target
 	 * @Column(type="integer") 
 	 * @GeneratedValue
 	 */
-	protected $target_id = null;
+	protected $id = null;
 	/**
 	 * @access protected
 	 * @var string
@@ -40,12 +40,12 @@ class Target
 	protected $email;
 
 	public function __construct() {
-		$this->groups = new \Dcotrine\Common\Collections\ArrayCollection();
+		$this->groups = new \Doctrine\Common\Collections\ArrayCollection();
 		
 	}
 	public function getId()
 	{
-		return $this->target_id;
+		return $this->tid;
 	}
 
 	public function getFName()
@@ -58,7 +58,7 @@ class Target
 		$this->target_fname = $name;
 	}
 
-	public function getFLName()
+	public function getLName()
 	{
 		return $this->target_lname;
 	}
@@ -78,7 +78,7 @@ class Target
 		$this->email = $email;
 	}
 	
-	public function addGroup(Group $group) {
+	public function addGroup(Groups $group) {
 		$this->groups[] = $group;
 	}
 }
