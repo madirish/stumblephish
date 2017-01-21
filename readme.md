@@ -19,3 +19,5 @@ Stumblephish includes three main components:
 1. Mailer - this piece runs on a schedule, formatting and delivering e-mails for a campaign
 2. Phishing Site - this piece presents the victims who click through links with template based sites that track metrics about users from time of click to user agents and can even present login forms and educational material for targets who submit credentials.  This component also supports hosting of web bugs to track e-mails.
 3. Web Based Admin Interface - this component allows admins to easy create and manage target lists, prepare campaigns, upload templates, and view and track results of campaigns and export PDF and CSV reports.
+
+
